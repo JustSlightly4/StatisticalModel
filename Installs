@@ -1,0 +1,5 @@
+pip install PyQt6
+pip install PyQt6-tools
+pip install PyQt6 matplotlib
+pip install yfinance
+pip install numpy
