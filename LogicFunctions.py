@@ -1,5 +1,7 @@
 import yfinance as yf
 
+
+
 def GetStockData(name):
 	# Define ticker and fetch data
 	try:
