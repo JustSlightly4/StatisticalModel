@@ -8,7 +8,7 @@ import LogicFunctions
         
 def PlotGraph(figure, canvas, name):
 	
-	dates, prices = LogicFunctions.GetStockData(name)
+	dates, prices, longName = LogicFunctions.GetStockData(name)
 	
 	if not dates or not prices:
 		return False
@@ -27,7 +27,7 @@ def PlotGraph(figure, canvas, name):
 	ax.set_xticks(ax.get_xticks()[::5])
 
 	#Writes all the graph information
-	ax.set_title("Predicted Market Model")
+	ax.set_title(longName + " Market Model")
 	ax.set_xlabel("Time")
 	ax.set_ylabel("Price")
 	ax.legend()
