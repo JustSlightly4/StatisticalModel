@@ -6,13 +6,11 @@ from datetime import date, timedelta
 
 import LogicFunctions
 import StockDataClass
-        
-def PlotGraph(figure, canvas, name):
+
+#Plots the graph using the provided instance of the stock class
+def PlotGraph(figure, canvas, stock):
 	
-	#Create an instance of the stock class
-	currStock = StockDataClass.Stock.create(name)
-	
-	if not currStock:
+	if not stock:
 		return False
 	
 	# Clear any existing plot
@@ -26,18 +24,18 @@ def PlotGraph(figure, canvas, name):
 	
 	#Plots the x and y arrays to the screen
 	#x size is determined by the size of the dates list
-	ax.plot(currStock.GetDates(), currStock.GetPrices(), label="y = ?", marker='.')
+	ax.plot(stock.GetDates(), stock.GetPrices(), label="y = ?", marker='.')
 	numOfLabels = 5 #Number of labels on the x-axis
-	if currStock.GetSize() >= numOfLabels:
+	if stock.GetSize() >= numOfLabels:
 		# Calculate tick indices evenly spaced between 0 and size-1
-		step = (currStock.GetSize() - 1) / (numOfLabels - 1)
+		step = (stock.GetSize() - 1) / (numOfLabels - 1)
 		tick_positions = [round(step * i) for i in range(numOfLabels)]
 	else:
-		tick_positions = list(range(currStock.GetSize()))  # show all if less than 5 data points
+		tick_positions = list(range(stock.GetSize()))  # show all if less than 5 data points
 	ax.set_xticks(tick_positions)
 
 	#Writes all the graph information
-	ax.set_title(currStock.GetLongName() + " Market Model")
+	ax.set_title(stock.GetLongName() + " Market Model")
 	ax.set_xlabel("Time")
 	ax.set_ylabel("Price")
 	ax.legend()
@@ -49,7 +47,7 @@ def PlotGraph(figure, canvas, name):
 	return True
 	
 def handleSearch(figure, canvas, input_field):
-	textboxFlag = PlotGraph(figure, canvas, input_field.text())
+	textboxFlag = PlotGraph(figure, canvas, StockDataClass.Stock.create(name))
 	if textboxFlag == False:
 		input_field.setStyleSheet("background-color: red;") #Changes search bar to red
 		print("Failed Search!")

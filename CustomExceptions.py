@@ -1,0 +1,2 @@
+class StockDataError(Exception):
+    pass

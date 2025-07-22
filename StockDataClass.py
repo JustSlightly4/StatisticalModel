@@ -1,6 +1,7 @@
 import yfinance as yf
 import json
 import os
+from datetime import datetime
 
 #Stock Class
 #When creating a instance of the stock class it is important
@@ -18,7 +19,6 @@ class Stock:
 		
 		#TRY GETTING DATA FROM YFINANCE API
 		if not self.valid:
-			print("Local Computer File was not valid!")
 			try:
 				#Not Saved Variables
 				stock = yf.Ticker(tickerName)
@@ -58,6 +58,7 @@ class Stock:
 			json.dump(data, f)
 			
 	# Loads data from a JSON file
+	#In this function so errors are handled by try-catch and so by if-statements
 	def load_from_json(self, tickerName):
 		try:
 			with open(tickerName + ".json", "r") as f:
@@ -67,12 +68,31 @@ class Stock:
 				self.valid = data["valid"]
 				self.dates = data["dates"]
 				self.prices = data["prices"]
+				
+			#Once stock is loaded, check to see if most recent date and set valid or not
+			today = datetime.today()
+			most_recent_str = self.dates[-1]
+			most_recent_date = datetime.strptime(most_recent_str, "%b %d, %Y")
+			if today.date() == most_recent_date.date():
+				print("Dates match!")
+			elif today.date() > most_recent_date.date():
+				print("Today's date is more recent.")
+				self.valid = False
+			else:
+				print("List has a more recent date than today.")
+				self.valid = False
+				
 		except FileNotFoundError:
 			print(f"Error: File '{tickerName}' not found.")
 			self.valid = False  # mark the object as invalid
 		except json.JSONDecodeError:
 			print(f"Error: File '{tickerName}' is not a valid JSON file.")
 			self.valid = False
+	
+	#Handles when the dates list is not up to date
+	#Variables today and most_recent_date of datetime variables
+	def _Handle_Outdated_Dates_and_Prices(self, today, most_recent_date):
+		history = stock.history(period=(str((most_recent_date - today).days) + "d"))
 				
 	def GetDates(self):
 		return self.dates
